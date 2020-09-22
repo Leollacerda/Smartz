@@ -63,8 +63,8 @@ def greeting(incoming_msg):
 
     # Create a Response object and craft a reply in Markdown.
     response = Response()
-    response.markdown = "Olá {}, eu sou o .".format(sender.firstName)
-    response.markdown += "See what I can do by asking for **/help**."
+    response.markdown = "Olá {}, eu sou o Smartz. Um dos robôs inteligentes desenvolvidos pela 2S baseado em Python".format(sender.firstName)
+    response.markdown += "Você pode escolher em que posso ajudá-lo inserindo o comando: **/help**."
     return response
 
 
@@ -229,6 +229,18 @@ def current_time(incoming_msg):
     )
     return reply
 
+def cotar_dolar():
+    #Pegando o conteúdo da página:
+    pagina = urllib.urlopen('http://www.bc.gov.br/htms/infecon/taxas/taxas.htm')
+    pagina = pagina.read()
+
+    #Obtendo o valor de compra e venda
+    taxa_compra, taxa_venda = re.findall('[0-9],[0-9][0-9][0-9]', pagina)
+
+    #retornand os resultados
+    return (taxa_compra, taxa_venda)
+
+print cotar_dolar()
 
 # Create help message for current_time command
 current_time_help = "Look up the current time for a given timezone. "
@@ -241,10 +253,9 @@ bot.set_greeting(greeting)
 bot.add_command("attachmentActions", "*", handle_cards)
 bot.add_command("/showcard", "show an adaptive card", show_card)
 bot.add_command("/dosomething", "help for do something", do_something)
-bot.add_command(
-    "/demo", "Sample that creates a Teams message to be returned.", ret_message
-)
+bot.add_command("/demo", "Sample that creates a Teams message to be returned.", ret_message)
 bot.add_command("/time", current_time_help, current_time)
+bot.add_command("/cotacao", cotar_dolar)
 
 # Every bot includes a default "/echo" command.  You can remove it, or any
 # other command with the remove_command(command) method.
